@@ -147,15 +147,17 @@ const co = require('co')
 const sugoCaller = require('sugo-caller')
 
 co(function * () {
-  let caller = sugoCaller('http://my-sugo-cloud.example.com/callers', {})
-  let actor = caller.connect('my-actor-01')
+  // let url = 'http://my-sugo-cloud.example.com/callers'
+  let url = 'http://localhost:3000/callers'
+  let caller = sugoCaller(url, {})
+  let actor = yield caller.connect('my-actor-01')
 
   // Access to the module
   let watcher = actor.get('watcher')
 
-  // Watch 'tmp' directory, ignores .dotfiles
-  yield watcher.watch('tmp', {ignored: /[\/\\]\./})
-  watcher.on('all', (event, path) => {
+  // Watch 'tmp' directory
+  yield watcher.watch('tmp', {})
+  watcher.on('all', ({event, path}) => {
     console.log(event, path)
   })
 }).catch((err) => console.error(err))
@@ -175,7 +177,7 @@ The following methods are available from remote callers for the module.
 
 + [.ping(pong) -> string](#method-ping)
 + [.assert() -> boolean](#method-assert)
-+ [.watch(, )](#method-watch)
++ [.watch(fileOrDir, options) -> string](#method-watch)
 
 <a name="method-ping"></a>
 ### .ping(pong) -> <code>string</code>
@@ -192,14 +194,14 @@ Test the reachability of a module.
 Test if the actor fulfills system requirements
 
 <a name="method-watch"></a>
-### .watch(, )
+### .watch(fileOrDir, options) -> <code>string</code>
 
 Start watching file or directory
 
 | Param | Type | Description |
 | ----- | ---- | ----------- |
-|   | <code>string</code> | file, dir, glob, or array |
-|   | <code>object</code> | options |
+| fileOrDir  | <code>string</code> | file or dir |
+| options  | <code>object</code> | options |
 
 
 
@@ -218,6 +220,7 @@ The following events my be emitted from the module.
 
 | Param | Description |
 | ----- | ----------- |
+| "all"  |  |
 | "add"  |  |
 | "change"  |  |
 | "unlink"  |  |
@@ -225,7 +228,6 @@ The following events my be emitted from the module.
 | "unlinkDir"  |  |
 | "error"  |  |
 | "ready"  |  |
-| "raw"  |  |
 
 
 <!-- Section from "doc/guides/04.Events.md.hbs" End -->
