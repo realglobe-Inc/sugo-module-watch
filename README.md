@@ -111,16 +111,20 @@ Register a module to actor.
  */
 'use strict'
 
-const sugoModuleWatch = require('sugo-module-watch')
+// const sugoModuleWatch = require('sugo-module-watch')
+const sugoModuleWatch = require('../lib')
 const sugoActor = require('sugo-actor')
 const co = require('co')
 
+// let url = 'http://my-sugo-cloud.example.com/actors'
+let url = 'http://localhost:3000/actors'
+
 co(function * () {
-  let actor = sugoActor('http://my-sugo-cloud.example.com/actors', {
+  let actor = sugoActor(url, {
     key: 'my-actor-01',
     modules: {
       // Register the module
-      module01: sugoModuleWatch({})
+      watcher: sugoModuleWatch({})
     }
   })
   yield actor.connect()
@@ -140,7 +144,6 @@ Then, call the module from a remote caller.
 'use strict'
 
 const co = require('co')
-const assert = require('assert')
 const sugoCaller = require('sugo-caller')
 
 co(function * () {
@@ -148,11 +151,13 @@ co(function * () {
   let actor = caller.connect('my-actor-01')
 
   // Access to the module
-  let module01 = actor.get('module01')
+  let watcher = actor.get('watcher')
 
-  // Send ping
-  let pong = yield module01.ping()
-  assert.ok(pong)
+  // Watch 'tmp' directory, ignores .dotfiles
+  yield watcher.watch('tmp', {ignored: /[\/\\]\./})
+  watcher.on('all', (event, path) => {
+    console.log(event, path)
+  })
 }).catch((err) => console.error(err))
 
 ```
@@ -170,6 +175,7 @@ The following methods are available from remote callers for the module.
 
 + [.ping(pong) -> string](#method-ping)
 + [.assert() -> boolean](#method-assert)
++ [.watch(, )](#method-watch)
 
 <a name="method-ping"></a>
 ### .ping(pong) -> <code>string</code>
@@ -185,6 +191,16 @@ Test the reachability of a module.
 
 Test if the actor fulfills system requirements
 
+<a name="method-watch"></a>
+### .watch(, )
+
+Start watching file or directory
+
+| Param | Type | Description |
+| ----- | ---- | ----------- |
+|   | <code>string</code> | file, dir, glob, or array |
+|   | <code>object</code> | options |
+
 
 
 <!-- Section from "doc/guides/03.Methods.md.hbs" End -->
@@ -193,6 +209,23 @@ Test if the actor fulfills system requirements
 
 <a name="section-doc-guides-04-events-md"></a>
 
+Events
+---------
+
+The following events my be emitted from the module.
+
+<a name="events"></a>
+
+| Param | Description |
+| ----- | ----------- |
+| "add"  |  |
+| "change"  |  |
+| "unlink"  |  |
+| "addDir"  |  |
+| "unlinkDir"  |  |
+| "error"  |  |
+| "ready"  |  |
+| "raw"  |  |
 
 
 <!-- Section from "doc/guides/04.Events.md.hbs" End -->

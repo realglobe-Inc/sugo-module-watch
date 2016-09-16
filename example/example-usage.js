@@ -6,16 +6,20 @@
  */
 'use strict'
 
-const sugoModuleWatch = require('sugo-module-watch')
+// const sugoModuleWatch = require('sugo-module-watch')
+const sugoModuleWatch = require('../lib')
 const sugoActor = require('sugo-actor')
 const co = require('co')
 
+// let url = 'http://my-sugo-cloud.example.com/actors'
+let url = 'http://localhost:3000/actors'
+
 co(function * () {
-  let actor = sugoActor('http://my-sugo-cloud.example.com/actors', {
+  let actor = sugoActor(url, {
     key: 'my-actor-01',
     modules: {
       // Register the module
-      module01: sugoModuleWatch({})
+      watcher: sugoModuleWatch({})
     }
   })
   yield actor.connect()

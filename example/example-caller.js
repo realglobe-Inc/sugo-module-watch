@@ -7,17 +7,20 @@
 'use strict'
 
 const co = require('co')
-const assert = require('assert')
 const sugoCaller = require('sugo-caller')
 
 co(function * () {
-  let caller = sugoCaller('http://my-sugo-cloud.example.com/callers', {})
-  let actor = caller.connect('my-actor-01')
+  // let url = 'http://my-sugo-cloud.example.com/callers'
+  let url = 'http://localhost:3000/callers'
+  let caller = sugoCaller(url, {})
+  let actor = yield caller.connect('my-actor-01')
 
   // Access to the module
-  let module01 = actor.get('module01')
+  let watcher = actor.get('watcher')
 
-  // Send ping
-  let pong = yield module01.ping()
-  assert.ok(pong)
+  // Watch 'tmp' directory
+  yield watcher.watch('tmp', {})
+  watcher.on('all', ({event, path}) => {
+    console.log(event, path)
+  })
 }).catch((err) => console.error(err))

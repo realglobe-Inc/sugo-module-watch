@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/realglobe-Inc/sugo-module-watch#readme",
   "dependencies": {
+    "chokidar": "^1.6.0",
     "co": "^4.6.0",
     "debug": "^2.2.0",
     "sg-check": "^1.0.6",
