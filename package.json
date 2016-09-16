@@ -1,0 +1,52 @@
+{
+  "name": "sugo-module-watch",
+  "version": "1.0.0",
+  "description": "SUGOS module of watching files",
+  "main": "lib",
+  "browser": "shim/browser",
+  "scripts": {
+    "prepublish": "./ci/build.js && ./ci/browser.js",
+    "test": "./ci/test.js"
+  },
+  "repository": "realglobe-Inc/sugo-module-watch",
+  "keywords": [
+    "SUGOS",
+    "module"
+  ],
+  "author": {
+    "email": "fujiharuka@realglobe.jp",
+    "name": "FujiHaruka",
+    "url": "https://github.com/FujiHaruka"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/realglobe-Inc/sugo-module-watch/issues"
+  },
+  "homepage": "https://github.com/realglobe-Inc/sugo-module-watch#readme",
+  "dependencies": {
+    "co": "^4.6.0",
+    "debug": "^2.2.0",
+    "sg-check": "^1.0.6",
+    "sugo-module-base": "^1.1.2"
+  },
+  "devDependencies": {
+    "ababel": "^1.0.19",
+    "ababel-es2015": "^1.0.2",
+    "ape-tmpl": "^5.0.14",
+    "coz": "^6.0.14",
+    "injectmock": "^2.0.0",
+    "sg-schemas": "^2.0.5",
+    "sg-templates": "^1.0.3",
+    "sg-travis": "^1.1.25",
+    "sg-validator": "^1.0.0",
+    "sugo-ci-module": "^2.0.5",
+    "sugos-assets": "^2.0.1"
+  },
+  "engines": {
+    "node": ">=6",
+    "npm": ">=3"
+  },
+  "publishConfig": {
+    "registry": "https://realglobe.artifactoryonline.com/realglobe/api/npm/npm-local"
+  }
+}
